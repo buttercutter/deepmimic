@@ -202,11 +202,41 @@ class DeepMimicRenderer(BaseRenderer):
         self._setup_skeleton()
 
     def _setup_skeleton(self):
-        self.joint_order = ['root', 'chest', 'neck', 'right_hip', 'right_knee', 'right_ankle', 'right_shoulder', 'right_elbow', 'left_hip', 'left_knee', 'left_ankle', 'left_shoulder', 'left_elbow']
-        self.parents = {'chest': 'root', 'neck': 'chest', 'right_hip': 'root', 'right_knee': 'right_hip', 'right_ankle': 'right_knee', 'right_shoulder': 'chest', 'right_elbow': 'right_shoulder', 'left_hip': 'root', 'left_knee': 'left_hip', 'left_ankle': 'left_knee', 'left_shoulder': 'chest', 'left_elbow': 'left_shoulder'}
-        self.offsets = {'chest': [0, 0.1, 0], 'neck': [0, 0.4, 0], 'right_hip': [0.1, -0.1, 0], 'right_knee': [0, -0.4, 0], 'right_ankle': [0, -0.4, 0], 'right_shoulder': [0.2, 0.35, 0], 'right_elbow': [0.3, 0, 0], 'left_hip': [-0.1, -0.1, 0], 'left_knee': [0, -0.4, 0], 'left_ankle': [0, -0.4, 0], 'left_shoulder': [-0.2, 0.35, 0], 'left_elbow': [-0.3, 0, 0]}
-        self.dof_axis = {'chest': 'y', 'neck': 'y', 'right_hip': 'x', 'right_knee': 'x', 'right_ankle': 'x', 'right_shoulder': 'z', 'right_elbow': 'x', 'left_hip': 'x', 'left_knee': 'x', 'left_ankle': 'x', 'left_shoulder': 'z', 'left_elbow': 'x'}
-        self.json_joint_order = ['chest', 'neck', 'right_hip', 'right_knee', 'right_ankle', 'right_shoulder', 'right_elbow', 'left_hip', 'left_knee', 'left_ankle', 'left_shoulder', 'left_elbow']
+        """Defines the DeepMimic skeleton structure, now including hands."""
+        self.joint_order = [
+            'root', 'chest', 'neck', 'right_hip', 'right_knee', 'right_ankle',
+            'right_shoulder', 'right_elbow', 'right_hand',
+            'left_hip', 'left_knee', 'left_ankle',
+            'left_shoulder', 'left_elbow', 'left_hand'
+        ]
+        self.parents = {
+            'chest': 'root', 'neck': 'chest',
+            'right_hip': 'root', 'right_knee': 'right_hip', 'right_ankle': 'right_knee',
+            'right_shoulder': 'chest', 'right_elbow': 'right_shoulder', 'right_hand': 'right_elbow',
+            'left_hip': 'root', 'left_knee': 'left_hip', 'left_ankle': 'left_knee',
+            'left_shoulder': 'chest', 'left_elbow': 'left_shoulder', 'left_hand': 'left_elbow'
+        }
+        self.offsets = {
+            'chest': [0, 0.1, 0], 'neck': [0, 0.4, 0],
+            'right_hip': [0.1, -0.1, 0], 'right_knee': [0, -0.4, 0], 'right_ankle': [0, -0.4, 0],
+            'right_shoulder': [0.2, 0.35, 0], 'right_elbow': [0.3, 0, 0], 'right_hand': [0.2, 0, 0],
+            'left_hip': [-0.1, -0.1, 0], 'left_knee': [0, -0.4, 0], 'left_ankle': [0, -0.4, 0],
+            'left_shoulder': [-0.2, 0.35, 0], 'left_elbow': [-0.3, 0, 0], 'left_hand': [-0.2, 0, 0]
+        }
+        self.dof_axis = {
+            'chest': 'y', 'neck': 'y',
+            'right_hip': 'x', 'right_knee': 'x', 'right_ankle': 'x',
+            'right_shoulder': 'y', 'right_elbow': 'z', 'right_hand': 'y',
+            'left_hip': 'x', 'left_knee': 'x', 'left_ankle': 'x',
+            'left_shoulder': 'y', 'left_elbow': 'z', 'left_hand': 'y'
+        }
+        # This order MUST match the order in bvh_to_deepmimic.py
+        self.json_joint_order = [
+            'chest', 'neck', 'right_hip', 'right_knee', 'right_ankle',
+            'right_shoulder', 'right_elbow', 'right_hand',
+            'left_hip', 'left_knee', 'left_ankle',
+            'left_shoulder', 'left_elbow', 'left_hand'
+        ]
 
     def render_frame(self, frame_idx):
         self.clear()
